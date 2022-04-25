@@ -86,9 +86,43 @@ def sort_transaction_by_column(transactions, column_index, is_reversed):
     return result
 
 
+def add_transaction(stock_id, senator_id, stock_type, amount_range):
+    # get all the transactions
+    cur.execute("SELECT * FROM transaction")
+    transactions = cur.fetchall()
+
+    # get the last transaction in the list sorted by ids, make this transaction id + 1 that
+    # most recent transaction should be the first
+    result = sort_transaction_by_column(transactions, 0, False)
+
+    # get the first id in transaction list
+    new_id = int(result[0][0]) + 1
+
+    print(new_id)
+
+
+def delete_transaction(transaction_id):
+    cur.execute("SELECT * FROM transaction")
+    transactions = cur.fetchall()
+    removed = []
+    for transaction in transactions:
+        if int(transaction[0]) == transaction_id:
+            print("found id of " + str(transaction_id))
+            removed = transaction
+            print("removing...")
+            break
+
+    # if removed is null then could not find
+    if not removed:
+        print("could not find transaction of " + str(transaction_id))
+    else:
+        print("removed transaction: " + str(transaction))
+
+
 def print_transactions(transactions):
     for transaction in transactions:
-        print("Transaction " + str(transaction[0]) + ": " + str(transaction[3]) + " | " + str(transaction[4]) + " | " + str(transaction[5]))
+        print("Transaction " + str(transaction[0]) + ": " + str(transaction[3]) + " | " + str(
+            transaction[4]) + " | " + str(transaction[5]))
 
 
 databaseName = input("enter the database name: ")
@@ -100,12 +134,18 @@ cur = conn.cursor()
 
 # EXAMPLES -----------------------------------------------------------------------------------------------------
 
-test = get_transactions_in_amount_range("$1,001 - $15,000")
+
+add_transaction(1, 2, 3, 4)
+delete_transaction(1)
+delete_transaction(0)
+
+
+# test = get_transactions_in_amount_range("$1,001 - $15,000")
 
 # sort by transaction result by id (transaction 1 first when True, the newest transaction first when False)
-sorted_by_id = sort_transaction_by_column(test, 0, True)
+# sorted_by_id = sort_transaction_by_column(test, 0, True)
 # sort by transaction result by date (the newest first when True, oldest when False)
-sorted_by_date = sort_transaction_by_column(test, 4, True)
+# sorted_by_date = sort_transaction_by_column(test, 4, True)
 
-print_transactions(sorted_by_id)
-print_transactions(sorted_by_date)
+# print_transactions(sorted_by_id)
+# print_transactions(sorted_by_date)

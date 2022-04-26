@@ -1,7 +1,3 @@
-from cProfile import label
-from curses import window
-from hashlib import new
-from re import A
 import psycopg2
 from tkinter import *
 from PIL import ImageTk, Image

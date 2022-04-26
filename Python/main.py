@@ -201,8 +201,12 @@ def openAddWdn():
     date.grid(row=5, column=1)
 
     #create confirm button
-    confirm_btn = Button(newWindow, text="confirm", command=add_transaction)
+    confirm_btn = Button(newWindow, text="confirm", command=confirm)
     confirm_btn.grid(row=6, column=1, columnspan=2,padx=10,pady=10,ipadx=100)
+
+#add_transaction
+def confirm():
+    return
 
 
 
@@ -227,34 +231,40 @@ filter_btn = Button(root, text="Filter!", command=get_transactions_in_amount_ran
 filter_btn.grid(row=0, column=1, columnspan=2,padx=10,pady=10,ipadx=100)
 
 
-#create a frame for the canvas with non-zero row and column
-frame = Frame(root)
-frame.grid(sticky='news')
+#the output box 
+listbox = Listbox(root)
+listbox.grid(row=3, column = 0,columnspan=2,padx=10,pady=10,ipadx=100, sticky=W + E)
 
-#the canvas which supports the scrollbar interface, layout to the left
-canvas = Canvas(frame, bg='#FFFFFF')
-canvas.pack(side="left", fill= X, expand=True)
+vbar = Scrollbar(listbox, orient="vertical")
 
+for values in range(100):
+    listbox.insert(END, values)
 
-#the scrollbar, layout to the right
-vbar=Scrollbar(frame,orient=VERTICAL, command=canvas.yview)
-vbar.pack(side="right",fill="y")
+listbox.config(yscrollcommand=vbar.set)
 
-#bind the scrollbar to the cavas
-canvas.configure(yscrollcommand=vbar.set)
-vbar.configure(command=canvas.yview)
-
-# The Frame to be scrolled, layout into the canvas
-# All widgets to be scrolled have to use this Frame as parent
-scrolled_frame = Frame(canvas, background=canvas.cget('bg'))
-canvas.create_window((4, 4), window=scrolled_frame, anchor="nw")
+vbar.config(command=listbox.yview)
 
 
-#create filter button
+
+#event callback for the listbox
+def callback(event):
+    selection = event.widget.curselection()
+    if selection:
+        index = selection[0]
+        data = event.widget.get(index)
+    #     label.configure(text=data)
+    # else:
+    #     label.configure(text="")
+
+listbox.bind("<<ListboxSelect>>", callback)
+
+
+
+#create add button
 add_btn = Button(root, text="Add Transaction", command=openAddWdn) #opens another widet
 add_btn.grid(row=4, column=0,columnspan=1, padx=10,pady=10,ipadx=100)
 
-#create filter button
+#create delete button
 delete_btn = Button(root, text="Delete Transaction", command=delete_transaction) #shuld delete
 delete_btn.grid(row=4, column=1, columnspan=2, padx=10,pady=10,ipadx=100)
 

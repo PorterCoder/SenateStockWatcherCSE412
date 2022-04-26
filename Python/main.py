@@ -1,11 +1,13 @@
 import psycopg2
+
 from tkinter import *
 from PIL import ImageTk, Image
 
 def connect_postgres(name, user, password):
     print("Attempting to connect to the database...")
-    n = name
-    u = user
+    n = input("enter the database name:  ")
+    u = input("enter your database username: (blank for default)")
+    p = input("enter your database password: ")
     if u == "":
         u = "postgres"
     p = password
@@ -24,6 +26,15 @@ def connect_postgres(name, user, password):
         exit()
     return c
 
+def connect_postgres_link():
+    link = str(input("postgres://cse412_1716:rXmvrZ07nhKSr1m0FTv_@cse412-1716.postgresql.a.osc-fr1.scalingo-dbs.com:33302/cse412_1716?sslmode=prefer"))
+    try:
+        c = psycopg2.connect(link)
+    except Exception as err:
+        print("I am unable to connect to the database")
+        c = None
+        exit()
+    return c
 
 def print_all_senators(senators):
     print("Printing all senators:")
@@ -276,7 +287,7 @@ databaseName = input("enter the database name: ")
 databaseUser = input("enter your database username: (blank for default)")
 databasePassword = input("enter your database password: ")
 
-conn = connect_postgres(databaseName, databaseUser, databasePassword)
+conn = connect_postgres_link()
 cur = conn.cursor()
 
 

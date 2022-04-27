@@ -58,12 +58,24 @@ def openAddWdn():
 
 
 def confirm():
-    if not addStock.get() or not addSenator.get() or not addType.get() or not addAmount.get() or not addDate.get():
+    stockName = addStock.get()
+    senatorName = addSenator.get()
+    stockType = addType.get()
+    amount = addAmount.get()
+    date = addDate.get()
+
+    if not (stockName and senatorName and stockType and amount and date):
         messagebox.showerror(title="Add Transaction", message="Missing information.")
     else:
-        db.add_transaction(addSenator.get(), addStock.get(), addAmount.get(), addDate.get(), addType.get())
-        addTransactionsToList()
+        senator_id = db.find_senator_id(senatorName)
+        stock_id = db.find_stock_id(stockName)
 
+        if not (senator_id and stock_id):
+            messagebox.showerror(title="Add Transaction", message="Unable to find senator or stock id.")
+        else:
+            db.add_transaction(senator_id, stock_id, amount, date, stockType)
+            addTransactionsToList()
+            
 def filterTransactions():
     if not selectedRange.get() or not selectedType.get():
         messagebox.showerror(title="Filter Transactions", message="No range or stock type selected.")
@@ -134,9 +146,9 @@ def deleteTransaction():
         deleted = db.delete_transaction(selectedTransaction)
         if deleted:
             t_list.delete(selectedIndex)
+            messagebox.showinfo(title="Delete Transaction", message=f"Successfully deleted transaction {selectedTransaction}.")
             selectedIndex = None
             selectedTransaction = None
-            messagebox.showinfo(title="Delete Transaction", message=f"Successfully deleted transaction {selectedTransaction}.")
         else:
             messagebox.showerror(title="Delete Transaction", message=f"Unable to delete transaction {selectedTransaction}.")
 

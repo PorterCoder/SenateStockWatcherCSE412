@@ -107,7 +107,7 @@ def get_transactions_in_amount_range(amount_range):
     sql_query = "SELECT * FROM transaction WHERE t_amount = '" + str(amount_range) + "'"
     cur.execute(sql_query)
     result = cur.fetchall()
-    print(sql_query)
+    #print(sql_query)
     return result
 
 
@@ -116,28 +116,28 @@ def get_transactions_with_type(transaction_type):
     sql_query = "SELECT * FROM transaction WHERE t_type = '" + str(transaction_type) + "'"
     cur.execute(sql_query)
     result = cur.fetchall()
-    print(sql_query)
+    #print(sql_query)
     return result
 
 def get_transactions_with_amount_range_and_type(amount_range, transaction_type):
     sql_query = "SELECT * FROM transaction WHERE t_amount = '" + str(amount_range) + "' AND t_stockidkey IN (SELECT stck_stockidkey FROM stock WHERE stck_sector = '" + str(transaction_type) + "')"
     cur.execute(sql_query)
     result = cur.fetchall()
-    print(sql_query)
+    #print(sql_query)
     return result
 
 def get_stock_sectors():
     sql_query = "SELECT DISTINCT stck_sector FROM stock"
     cur.execute(sql_query)
     result = cur.fetchall()
-    print(sql_query)
+    #print(sql_query)
     return result
 
 def get_transactions_with_stock(stock_id):
     sql_query = "SELECT * FROM transaction WHERE t_stockidkey = '" + str(stock_id) + "'"
     cur.execute(sql_query)
     result = cur.fetchall()
-    print(sql_query)
+    #print(sql_query)
     return result
 
 
@@ -145,7 +145,7 @@ def get_transactions_with_senator(senator_id):
     sql_query = "SELECT * FROM transaction WHERE t_senatoridkey = '" + str(senator_id) + "'"
     cur.execute(sql_query)
     result = cur.fetchall()
-    print(sql_query)
+    #print(sql_query)
     return result
 
 
@@ -184,10 +184,8 @@ def add_transaction(senator_id, stock_id, amount_range, date, stock_type):
 
     print("adding new transaction with id of " + str(new_id))
 
-    sql_query = "INSERT INTO transaction(t_transactionid, t_senatoridkey, t_stockidkey, t_amount, t_date, t_type) VALUES"
-    sql_query += " ('" + str(new_id) + "', '" + str(senator_id) + "', '" + str(stock_id) + "', '" + str(amount_range)
-    sql_query += "', '" + str(date) + "', '" + str(stock_type) + "')"
-    print(sql_query)
+    sql_query = f"INSERT INTO transaction(t_transactionid, t_senatoridkey, t_stockidkey, t_amount, t_date, t_type) VALUES ('{new_id}', '{senator_id}', '{stock_id}', '{amount_range}', '{date}', '{stock_type}')"
+    #print(sql_query)
     cur.execute(sql_query)
 
 
